@@ -351,3 +351,5 @@ MigrationBackup/
 
 venv/
 __pycache__
+.env
+
