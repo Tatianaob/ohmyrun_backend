@@ -7,11 +7,11 @@ class Pin(db.Model):
     description = db.Column(db.String)
 
 
-def to_dict(self):
-    pin_dict = {
-        "id": self.id,
-        "latitude": self.latitude,
-        "longitude": self.longitude,
-        "description": self.description
-    }
-    return pin_dict
+    def to_dict(self):
+        pin_dict = {
+            "id": self.id,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "description": self.description
+        }
+        return pin_dict

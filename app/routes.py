@@ -6,7 +6,31 @@ from app import db
 import os
 
 
-pin_bp = Blueprint("pin", __name__, url_prefix="/pin")
+pin_bp = Blueprint("pin_bp", __name__, url_prefix="/pin")
+
+
+@pin_bp.route('', methods=['POST'])
+def create_one_pin():
+    request_body = request.get_json()
+    if "latitude" not in request_body or "longitude" not in request_body or "description" not in request_body:
+        return jsonify({
+            "details": "Invalid data"
+        })
+    new_pin = Pin(latitude=request_body["latitude"],longitude=request_body["longitude"], description=[request_body["description"]])
+    db.session.add(new_pin)
+    db.session.commit()
+    return "New Pin successfully created"
+
+
+@pin_bp.route('', methods = ['GET'])
+def get_all_pins():
+    pins_response= []
+    all_pins = Pin.query.all()
+
+    for pin in all_pins:
+        pins_response.append(pin.to_dict())
+    return jsonify(pins_response)
+    
 
 def get_model_from_id(cls, model_id):
     try:
@@ -20,26 +44,3 @@ def get_model_from_id(cls, model_id):
         return abort(make_response({"msg": f"Could not find the pin with id: {model_id}"}, 404))
     
     return chosen_pin
-
-
-@pin_bp.route('', methods=['POST'])
-def create_one_pin():
-    request_body = request.get_json()
-    if "latitude" not in request_body or "longitude" not in request_body or "description" not in request_body:
-        return jsonify({
-            "details": "Invalid data"
-        })
-    new_pin = Pin(latitude=request_body["latitude"],longitude=request_body["longitude"], description=[request_body["description"]])
-    db.session.add(new_pin)
-    db.session.commit()
-
-
-@pin_bp.route('', methods = ['GET'])
-def get_all_pins():
-    pins_response= []
-    all_pins = Pin.query.all()
-
-    for pin in all_pins:
-        pins_response.append(pin.to_dict())
-    return jsonify(pins_response)
-    
