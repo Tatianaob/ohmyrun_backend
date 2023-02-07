@@ -1,3 +1,4 @@
+import json
 import pytest
 from app.models.pin import Pin
 from app import create_app
@@ -71,20 +72,15 @@ def test_create_pin(client):
     response = client.post("/pin", json={
         "latitude": 47.83,
         "longitude": -122.33,
-        "description": "Running is fun",
+        "description": "Running is fun"
     })
     response_body = response.get_json()
 
     #Assert
     assert response.status_code == 201
-    assert response_body == [
-        {
-         "id": 1,
-        "description": "Running is fun",
-        "latitude": 47.83,
-        "longitude": -122.33,
-        }
-    ]
+    assert response_body == {
+        "details": "Pin successfully created"
+    }
     new_pin = Pin.query.get(1)
     assert new_pin.latitude == 47.83
     assert new_pin.longitude == -122.33

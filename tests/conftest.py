@@ -54,15 +54,3 @@ def three_pins(app):
             latitude=-23.8128, longitude=-16.2842, description="Third random pin from conftest")
     ])
     db.session.commit()
-
-
-# This fixture gets called in every test that
-# references "one_pin"
-# This fixture creates a pin and saves it in the database
-# @pytest.fixture
-# def one_pin(app):
-#     new_pin = Pin(latitude=47.43,longitude=-122.83,description="Running is fun")
-#     db.session.add(new_pin)
-#     db.session.commit()
-
-
