@@ -14,11 +14,11 @@ def create_one_pin():
     if "latitude" and "longitude" and "description" not in request_body:
         return jsonify({
             "details": "Invalid data"
-        })
+        }), 400
     new_pin = Pin(latitude=request_body["latitude"], longitude=request_body["longitude"], description=request_body["description"])
     db.session.add(new_pin)
     db.session.commit()
-    return "New Pin successfully created"
+    return "New Pin successfully created", 201
 
 
 @pin_bp.route('', methods=['GET'])
@@ -36,8 +36,6 @@ def get_one_pin(id):
     return jsonify ({
         "pin": chosen_pin.to_dict()
     }), 200
-
-
 
 @pin_bp.route('/<id>', methods=['DELETE'])
 def delete_one_pin(id):
@@ -72,3 +70,4 @@ def get_pin_from_id(id):
     if chosen_pin is None:
         return abort(make_response({"msg": f"Could not find pin item with id: {id}"}, 404))
     return chosen_pin
+
