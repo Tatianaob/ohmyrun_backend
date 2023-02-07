@@ -46,6 +46,16 @@ def delete_one_pin(id):
         "details": "Pin successfully deleted"
         }), 200
 
+@pin_bp.route('', methods=['DELETE'])
+def delete_all_pins():
+    Pin.query.delete()
+    db.session.commit()
+    return jsonify({
+        "details": "All pins successfully deleted"
+    }), 200
+
+
+
 
 # def get_model_from_id(cls, model_id):
 #     try:

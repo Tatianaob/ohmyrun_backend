@@ -77,14 +77,14 @@ def test_create_pin(client):
 
     #Assert
     assert response.status_code == 201
-    # assert response_body == [
-    #     {
-    #     "description": "Running is fun",
-    #     "id": 1,
-    #     "latitude": 47.83,
-    #     "longitude": -122.33,
-    #     }
-    # ]
+    assert response_body == [
+        {
+         "id": 1,
+        "description": "Running is fun",
+        "latitude": 47.83,
+        "longitude": -122.33,
+        }
+    ]
     new_pin = Pin.query.get(1)
     assert new_pin.latitude == 47.83
     assert new_pin.longitude == -122.33
