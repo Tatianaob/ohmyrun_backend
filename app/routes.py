@@ -30,16 +30,45 @@ def get_all_pins():
         pins_response.append(pin.to_dict())
     return jsonify(pins_response)
     
+@pin_bp.route('<id>', methods=['GET'])
+def get_one_pin(id):
+    chosen_pin = get_pin_from_id(id)
+    return jsonify ({
+        "pin": chosen_pin.to_dict()
+    }), 200
 
-def get_model_from_id(cls, model_id):
+
+
+@pin_bp.route('/<id>', methods=['DELETE'])
+def delete_one_pin(id):
+    pin = get_pin_from_id(id)
+    db.session.delete(pin)
+    db.session.commit()
+    return jsonify({
+        "details": "Pin successfully deleted"
+        }), 200
+
+
+# def get_model_from_id(cls, model_id):
+#     try:
+#         model_id = int(model_id)
+#     except ValueError:
+#         return abort(make_response({"msg": f"invalid data type: {model_id}"}, 200))
+
+#     chosen_pin = cls.query.get(model_id)
+
+#     if chosen_pin is None:
+#         return abort(make_response({"msg": f"Could not find the pin with id: {model_id}"}, 404))
+    
+#     return chosen_pin
+
+def get_pin_from_id(id):
     try:
-        model_id = int(model_id)
+        id = int(id)
     except ValueError:
-        return abort(make_response({"msg": f"invalid data type: {model_id}"}, 200))
-
-    chosen_pin = cls.query.get(model_id)
+        return abort(make_response({"msg":f"Invalid data type: {id}"}, 400))
+    chosen_pin = Pin.query.get(id)
 
     if chosen_pin is None:
-        return abort(make_response({"msg": f"Could not find the pin with id: {model_id}"}, 404))
-    
+        return abort(make_response({"msg": f"Could not find pin item with id: {id}"}, 404))
     return chosen_pin
